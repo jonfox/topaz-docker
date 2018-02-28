@@ -1,0 +1,9 @@
+#!/bin/bash
+
+docker volume rm topaz-conf
+docker volume create topaz-conf
+docker create --name topaz-conf -v topaz-conf:/conf topaztechnology/base:3.6
+docker start topaz-conf
+docker cp conf/ topaz-conf:/
+docker stop topaz-conf
+docker rm topaz-conf
