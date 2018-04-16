@@ -51,6 +51,7 @@ services:
     volumes:
     - topaz-conf:/opt/topaz/conf
     - topaz-data:/opt/topaz/data
+    - topaz-log:/opt/topaz/log
     - topaz-shared:/opt/topaz/tmp
     - /etc:/opt/topaz/conf/host-etc
     environment:
@@ -71,6 +72,7 @@ volumes:
   redis-data:
   monet-data:
   topaz-data:
+  topaz-log:
   topaz-shared:
   topaz-conf:
     external: true
