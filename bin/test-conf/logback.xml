@@ -8,7 +8,7 @@
       <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level - %msg%n</pattern>
     </encoder>
     <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-      <level>INFO</level>
+      <level>DEBUG</level>
     </filter>
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
       <fileNamePattern>/opt/topaz/log/topaz.%d{yyyy-MM-dd}.log</fileNamePattern>
@@ -23,11 +23,11 @@
       <pattern>%d{HH:mm:ss.SSS} %-5level - %msg%n</pattern>
     </encoder>
     <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-      <level>INFO</level>
+      <level>DEBUG</level>
     </filter>
   </appender>
 
-  <root level="info">
+  <root level="debug">
     <appender-ref ref="CONSOLE" />
     <appender-ref ref="FILE" />
   </root>
