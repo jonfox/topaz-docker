@@ -1,0 +1,3 @@
+-Xms4g
+-Xmx16g
+-verbose:gc
