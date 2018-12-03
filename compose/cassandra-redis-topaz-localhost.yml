@@ -66,6 +66,7 @@ services:
       PIVOT_DB_TYPE: monet
       MONET_BULK_LOAD_DIR: /opt/topaz/tmp
       CONSUL_URL: http://consul:8500
+      ROOT_PASSWORD: # Set first time only
     depends_on:
     - consul
     - cassandra
