@@ -62,6 +62,7 @@ services:
       MONET_BULK_LOAD_DIR: /opt/topaz/tmp
       JAVA_DEBUG: 1
       JAVA_DEBUG_PORT: 26630
+      ROOT_PASSWORD: # Set first time only
     depends_on:
     - postgres
     - redis
