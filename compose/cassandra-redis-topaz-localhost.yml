@@ -53,7 +53,9 @@ services:
     restart: always
     ports:
     - 9021:9021
-    - 26634-26637:26634-26637
+    - 127.0.0.1:26630:26630
+    - 26634:26634
+    - 127.0.0.1:26636:26636
     volumes:
     - topaz-conf:/opt/topaz/conf
     - topaz-data:/opt/topaz/data
