@@ -28,7 +28,7 @@ services:
       REDIS_TYPE: server
 
   monet:
-    image: topaztechnology/monet:11.27.5
+    image: topaztechnology/monetdb:11.31.13
     hostname: monet
     restart: always
     ports:
