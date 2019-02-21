@@ -1,37 +1,53 @@
 <configuration scan="true" scanPeriod="3 seconds">
 
+  <conversionRule conversionWord="optenv" converterClass="com.topaz.utils.OptionalEnvironmentVariableConverter" />
+
+  <logger name="slick" level="WARN" />
+  <logger name="scalikejdbc" level="WARN" />
+  <logger name="com.zaxxer.hikari" level="WARN" />
+
+<!--
+  <appender name="STASH" class="net.logstash.logback.appender.LogstashSocketAppender">
+    <host>localhost</host>
+    <port>5140</port>
+    <customFields>{"Hostname": "${HOSTNAME}", "JVM": "${JVM_NAME}", "Akka port": "${AKKA_PORT}"}</customFields>
+  </appender>
+-->
+
   <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <file>/opt/topaz/log/topaz.log</file>
+    <file>/opt/topaz/log/topaz-${JVM_NAME}.log</file>
     <append>true</append>
     <immediateFlush>true</immediateFlush>
     <encoder>
-      <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level - %msg%n</pattern>
+      <pattern>%d{ISO8601} %-5level [%thread] - %msg%n</pattern>
     </encoder>
     <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
       <level>DEBUG</level>
     </filter>
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      <fileNamePattern>/opt/topaz/log/topaz.%d{yyyy-MM-dd}.log</fileNamePattern>
+      <fileNamePattern>/opt/topaz/log/topaz-${JVM_NAME}.%d{yyyy-MM-dd}.log</fileNamePattern>
       <maxHistory>30</maxHistory>
       <totalSizeCap>2GB</totalSizeCap>
     </rollingPolicy>
   </appender>
-        
+
   <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-    <immediateFlush>true</immediateFlush>
-    <encoder>
-      <pattern>%d{HH:mm:ss.SSS} %-5level - %msg%n</pattern>
-    </encoder>
-    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-      <level>DEBUG</level>
-    </filter>
+      <immediateFlush>true</immediateFlush>
+      <withJansi>true</withJansi>
+      <encoder>
+          <pattern>
+              %d{ISO8601} %highlight(%-5level) %green(%-18(%optenv{JVM_NAME} \(%optenv{AKKA_PORT}\))) - %msg%n
+          </pattern>
+      </encoder>
+      <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+          <level>INFO</level>
+      </filter>
   </appender>
 
-  <root level="debug">
-    <appender-ref ref="CONSOLE" />
+  <root level="DEBUG">
+<!--    <appender-ref ref="STASH" /> -->
     <appender-ref ref="FILE" />
+    <appender-ref ref="CONSOLE" />
   </root>
-  <logger name="slick" level="WARN" />
-  <logger name="scalikejdbc" level="WARN" />
-  <logger name="com.zaxxer.hikari" level="WARN" />
+
 </configuration>
