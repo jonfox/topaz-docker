@@ -16,7 +16,7 @@ docker stop compose_redis_1
 docker create --rm --name redis-restore-container -v compose_redis-data:/data topaztechnology/base:3.8
 docker start redis-restore-container
 docker cp $1/redis.tar.gz redis-restore-container:/tmp
-docker exec redis-restore-container sh -c "tar zxvf /tmp/redis.tar.gz -C /data"
+docker exec redis-restore-container sh -c "tar xzvf /tmp/redis.tar.gz -C /data"
 docker stop redis-restore-container
 docker start compose_redis_1
 
