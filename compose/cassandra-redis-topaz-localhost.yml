@@ -68,7 +68,8 @@ services:
       PIVOT_DB_TYPE: monet
       MONET_BULK_LOAD_DIR: /opt/topaz/tmp
       CONSUL_URL: http://consul:8500
-      ROOT_PASSWORD: # Set first time only
+      ROOT_PASSWORD_HASH: # Set first time only using bin/create-password-hash.sh. Remember to quote and replace $ with $$
+      PASSWORD_HASHING_PEPPER: # Set this initially and never change
     depends_on:
     - consul
     - cassandra

@@ -61,7 +61,8 @@ services:
       MONET_BULK_LOAD_DIR: /opt/topaz/tmp
       JAVA_DEBUG: 1
       JAVA_DEBUG_PORT: 26630
-      ROOT_PASSWORD: # Set first time only
+      ROOT_PASSWORD_HASH: # Set first time only using bin/create-password-hash.sh. Remember to quote and replace $ with $$
+      PASSWORD_HASHING_PEPPER: # Set this initially and never change
     depends_on:
     - postgres
     - redis
