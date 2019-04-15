@@ -5,8 +5,9 @@ services:
     image: topaztechnology/mssql-server-linux:2017-CU9
     hostname: sqlserver
     restart: always
-    ports:
-    - 1433:1433
+    # Uncomnment to expose SQL Server externally
+    #ports:
+    #- 1433:1433
     volumes:
     - sqlserver-data:/var/opt/mssql
     environment:
@@ -19,8 +20,9 @@ services:
     image: topaztechnology/redis:4.0.2
     hostname: redis
     restart: always
-    ports:
-    - 6379:6379
+    # Uncomment to expose Redis externally
+    #ports:
+    #- 6379:6379
     volumes:
     - redis-data:/redis/data
     environment:
@@ -31,8 +33,9 @@ services:
     image: topaztechnology/monetdb:11.31.13
     hostname: monet
     restart: always
-    ports:
-    - 50000:50000
+    # Uncomment to expose Monet externally
+    #ports:
+    #- 50000:50000
     volumes:
     - monet-data:/var/lib/monetdb
     - topaz-shared:/opt/topaz/tmp
@@ -45,10 +48,10 @@ services:
     hostname: topaz
     restart: always
     ports:
-    - 9021:9021
-    - 127.0.0.1:26630:26630
-    - 26634:26634
-    - 127.0.0.1:26636:26636
+    - 9021:9021    # Getdown port
+    - 26634:26634  # Topaz server port
+    # Uncomment to expost REPL port locally
+    #- 127.0.0.1:26636:26636
     volumes:
     - topaz-conf:/opt/topaz/conf
     - topaz-data:/opt/topaz/data
@@ -56,15 +59,13 @@ services:
     - topaz-shared:/opt/topaz/tmp
     - /etc:/opt/topaz/conf/host-etc
     environment:
-      LOG_LEVEL: DEBUG
+      LOG_LEVEL: INFO
       BACKEND_DB_TYPE: sqlserver
       BACKEND_TICK_DB_TYPE: redis
       PIVOT_DB_TYPE: monet
       MONET_BULK_LOAD_DIR: /opt/topaz/tmp
-      JAVA_DEBUG: 1
-      JAVA_DEBUG_PORT: 26630
       ROOT_PASSWORD_HASH: # Set first time only using bin/create-password-hash.sh. Remember to quote and replace $ with $$
-      PASSWORD_HASHING_PEPPER: # Set this initially and never change
+      PASSWORD_HASHING_PEPPER: # Set this initially here or in config and never change
     depends_on:
     - sqlserver
     - redis
