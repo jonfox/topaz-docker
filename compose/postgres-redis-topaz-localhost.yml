@@ -42,7 +42,7 @@ services:
       MONET_DATABASE: topaz-pivot
 
   topaz:
-    image: topaztechnology/topaz:1.5.8
+    image: topaztechnology/topaz:1.6.0
     hostname: topaz
     restart: always
     ports:
