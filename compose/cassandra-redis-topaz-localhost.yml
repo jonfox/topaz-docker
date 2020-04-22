@@ -51,7 +51,7 @@ services:
       MONET_DATABASE: pivot-db
 
   topaz:
-    image: topaztechnology/topaz:1.6.3
+    image: topaztechnology/topaz:latest
     hostname: topaz
     restart: always
     ports:
@@ -70,9 +70,12 @@ services:
       BACKEND_TICK_DB_TYPE: redis
       PIVOT_DB_TYPE: monet
       MONET_BULK_LOAD_DIR: /opt/topaz/tmp
-      CONSUL_URL: http://localhost:8500
-      ROOT_PASSWORD_HASH: # Set first time only using bin/create-password-hash.sh. Remember to quote and replace $ with $$
-      PASSWORD_HASHING_PEPPER: # Set this initially here or in config and never change
+      # Set first time only using bin/create-password-hash.sh. Remember to quote and replace $ with $$
+      # This example has a password of "root" and must be changed
+      ROOT_PASSWORD_HASH: "$$2a$$12$$FMN3DQ5DeF06gLw/yb3WsegCTSExXb34g6mdLp8ctD6GaKK80VvpO"
+      # Set this initially here or in config and never change.
+      # This example hashing pepper must be changed
+      PASSWORD_HASHING_PEPPER: "pepper"
     depends_on:
     - consul
     - cassandra
