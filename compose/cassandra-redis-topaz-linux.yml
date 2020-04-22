@@ -1,18 +1,6 @@
 version: '3'
 
 services:
-  consul:
-    image: topaztechnology/consul:1.0.6
-    hostname: consul
-    restart: always
-    ports:
-    - 8500:8500
-    volumes:
-    - consul-data:/consul/data
-    environment:
-      LOG_LEVEL: INFO
-      CONSUL_TYPE: server
-
   cassandra:
     image: cassandra:3.11
     hostname: cassandra
