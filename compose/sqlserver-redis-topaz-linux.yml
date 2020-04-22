@@ -2,7 +2,7 @@ version: '3'
 
 services:
   sqlserver:
-    image: topaztechnology/mssql-server-linux:2017-CU9
+    image: topaztechnology/mssql-server-linux:2019-CU3
     hostname: sqlserver
     restart: always
     # Uncomnment to expose SQL Server externally
@@ -44,7 +44,7 @@ services:
       MONET_DATABASE: topaz-pivot
 
   topaz:
-    image: topaztechnology/topaz:1.6.3
+    image: topaztechnology/topaz:latest
     hostname: topaz
     restart: always
     ports:
@@ -64,8 +64,12 @@ services:
       BACKEND_TICK_DB_TYPE: redis
       PIVOT_DB_TYPE: monet
       MONET_BULK_LOAD_DIR: /opt/topaz/tmp
-      ROOT_PASSWORD_HASH: # Set first time only using bin/create-password-hash.sh. Remember to quote and replace $ with $$
-      PASSWORD_HASHING_PEPPER: # Set this initially here or in config and never change
+      # Set first time only using bin/create-password-hash.sh. Remember to quote and replace $ with $$
+      # This example has a password of "root" and must be changed
+      ROOT_PASSWORD_HASH: "$$2a$$12$$FMN3DQ5DeF06gLw/yb3WsegCTSExXb34g6mdLp8ctD6GaKK80VvpO"
+      # Set this initially here or in config and never change.
+      # This example hashing pepper must be changed
+      PASSWORD_HASHING_PEPPER: "pepper"
     depends_on:
     - sqlserver
     - redis
