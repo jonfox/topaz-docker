@@ -1,4 +1,4 @@
-version: '3'
+version: '2.4'
 
 services:
   postgres:
@@ -45,6 +45,7 @@ services:
     image: topaztechnology/topaz:latest
     hostname: topaz
     restart: always
+    mem_limit: 6gb
     ports:
     - 9021:9021    # Getdown port
     - 26634:26634  # Topaz server port
@@ -55,13 +56,11 @@ services:
     - topaz-data:/opt/topaz/data
     - topaz-log:/opt/topaz/log
     - topaz-shared:/opt/topaz/tmp
-    - /etc:/opt/topaz/conf/host-etc
     environment:
       LOG_LEVEL: INFO
-      BACKEND_DB_TYPE: postgres
-      BACKEND_TICK_DB_TYPE: redis
-      PIVOT_DB_TYPE: monet
-      MONET_BULK_LOAD_DIR: /opt/topaz/tmp
+      TOPAZ_START_ARGS: com.topaz.server.Main
+      AKKA_DISCOVERY_TYPE: config
+      JVM_NAME: Seed
       # Set first time only using bin/create-password-hash.sh. Remember to quote and replace $ with $$
       # This example has a password of "root" and must be changed
       ROOT_PASSWORD_HASH: "$$2a$$12$$FMN3DQ5DeF06gLw/yb3WsegCTSExXb34g6mdLp8ctD6GaKK80VvpO"
@@ -73,6 +72,36 @@ services:
     - redis
     - monet
 
+  topaz-compute-1:
+    image: topaztechnology/topaz:latest
+    hostname: topaz-compute-1
+    restart: always
+    mem_limit: 6gb
+    volumes:
+      - topaz-conf:/opt/topaz/conf
+      - topaz-log:/opt/topaz/log
+    environment:
+      TOPAZ_START_ARGS: com.topaz.server.ComputeMain
+      AKKA_DISCOVERY_TYPE: config
+      JVM_NAME: Compute-1
+    depends_on:
+      - topaz
+
+  topaz-compute-2:
+    image: topaztechnology/topaz:latest
+    hostname: topaz-compute-2
+    restart: always
+    mem_limit: 6gb
+    volumes:
+      - topaz-conf:/opt/topaz/conf
+      - topaz-log:/opt/topaz/log
+    environment:
+      TOPAZ_START_ARGS: com.topaz.server.ComputeMain
+      AKKA_DISCOVERY_TYPE: config
+      JVM_NAME: Compute-2
+    depends_on:
+      - topaz
+  
 volumes:
   postgres-data:
   redis-data:
