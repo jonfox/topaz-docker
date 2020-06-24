@@ -1,15 +1,20 @@
 version: '3'
 
 services:
-  cassandra:
-    image: cassandra:3.11
-    hostname: cassandra
+  sqlserver:
+    image: topaztechnology/mssql-server-linux:2019-CU4
+    hostname: sqlserver
     restart: always
-    # Uncomment to expose Cassandra externally
+    # Uncomnment to expose SQL Server externally
     #ports:
-    #- 9042:9042
+    #- 1433:1433
     volumes:
-    - cassandra-data:/var/lib/cassandra
+    - sqlserver-data:/var/opt/mssql
+    environment:
+      ACCEPT_EULA: Y
+      SQL_USER: topaz
+      SQL_PASSWORD: topaz
+      SQL_DB: TopazMain
 
   redis:
     image: topaztechnology/redis:4.0.2
@@ -36,12 +41,13 @@ services:
     - topaz-shared:/opt/topaz/tmp
     environment:
       LOG_LEVEL: INFO
-      MONET_DATABASE: pivot-db
+      MONET_DATABASE: topaz-pivot
 
   topaz:
     image: topaztechnology/topaz:latest
     hostname: topaz
     restart: always
+    mem_limit: 6gb
     ports:
     - 9021:9021    # Getdown port
     - 26634:26634  # Topaz server port
@@ -50,14 +56,13 @@ services:
     volumes:
     - topaz-conf:/opt/topaz/conf
     - topaz-data:/opt/topaz/data
+    - topaz-log:/opt/topaz/log
     - topaz-shared:/opt/topaz/tmp
     environment:
-      EXTERNAL_HOSTNAME: localhost
-      LOG_LEVEL: DEBUG
-      BACKEND_DB_TYPE: cassandra
-      BACKEND_TICK_DB_TYPE: redis
-      PIVOT_DB_TYPE: monet
-      MONET_BULK_LOAD_DIR: /opt/topaz/tmp
+      LOG_LEVEL: INFO
+      TOPAZ_START_ARGS: com.topaz.server.Main
+      AKKA_DISCOVERY_TYPE: config
+      JVM_NAME: Seed
       # Set first time only using bin/create-password-hash.sh. Remember to quote and replace $ with $$
       # This example has a password of "root" and must be changed
       ROOT_PASSWORD_HASH: "$$2a$$12$$FMN3DQ5DeF06gLw/yb3WsegCTSExXb34g6mdLp8ctD6GaKK80VvpO"
@@ -65,17 +70,46 @@ services:
       # This example hashing pepper must be changed
       PASSWORD_HASHING_PEPPER: "pepper"
     depends_on:
-    - consul
-    - cassandra
+    - sqlserver
     - redis
     - monet
 
+  topaz-compute-1:
+    image: topaztechnology/topaz:latest
+    hostname: topaz-compute-1
+    restart: always
+    mem_limit: 6gb
+    volumes:
+      - topaz-conf:/opt/topaz/conf
+      - topaz-log:/opt/topaz/log
+    environment:
+      TOPAZ_START_ARGS: com.topaz.server.ComputeMain
+      AKKA_DISCOVERY_TYPE: config
+      JVM_NAME: Compute-1
+    depends_on:
+      - topaz
+
+  topaz-compute-2:
+    image: topaztechnology/topaz:latest
+    hostname: topaz-compute-2
+    restart: always
+    mem_limit: 6gb
+    volumes:
+      - topaz-conf:/opt/topaz/conf
+      - topaz-log:/opt/topaz/log
+    environment:
+      TOPAZ_START_ARGS: com.topaz.server.ComputeMain
+      AKKA_DISCOVERY_TYPE: config
+      JVM_NAME: Compute-2
+    depends_on:
+      - topaz
+
 volumes:
-  consul-data:
-  cassandra-data:
+  sqlserver-data:
   redis-data:
   monet-data:
   topaz-data:
+  topaz-log:
   topaz-shared:
   topaz-conf:
     external: true

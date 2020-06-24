@@ -1,3 +1,4 @@
--Xms2g
--Xmx8g
+-XX:+UseContainerSupport
+-XX:MaxRAMPercentage=90.0
+-XX:G1ReservePercent=20
 -Xlog:gc
