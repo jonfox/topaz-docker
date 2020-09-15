@@ -3,9 +3,9 @@
 set -eo pipefail
 
 function configureHostname {
-  if [[ -f "/etc/hostname" ]]; then
-    # Should work on Linux
-    EXTERNAL_HOSTNAME=$(cat /etc/hostname)
+  if [[ -f "/usr/bin/hostname" ]]; then
+    # Should work on Linux or Windows MSYS
+    EXTERNAL_HOSTNAME=$(/usr/bin/hostname)
   elif [[ -f "/usr/sbin/scutil" ]]; then
     # Should work on macOS
     EXTERNAL_HOSTNAME=$(/usr/sbin/scutil --get LocalHostName)
