@@ -6,13 +6,7 @@
   <logger name="scalikejdbc" level="WARN" />
   <logger name="com.zaxxer.hikari" level="WARN" />
 
-<!--
-  <appender name="STASH" class="net.logstash.logback.appender.LogstashSocketAppender">
-    <host>localhost</host>
-    <port>5140</port>
-    <customFields>{"Hostname": "${HOSTNAME}", "JVM": "${JVM_NAME}", "Akka port": "${AKKA_PORT}"}</customFields>
-  </appender>
--->
+  <variable name="LOG_LEVEL" value="${LOG_LEVEL:-INFO}" />
 
   <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
     <file>/opt/topaz/log/topaz-${JVM_NAME}.log</file>
@@ -44,10 +38,25 @@
       </filter>
   </appender>
 
-  <root level="INFO">
-<!--    <appender-ref ref="STASH" /> -->
+<!--
+  <appender name="STASH" class="net.logstash.logback.appender.LogstashSocketAppender">
+    <host>localhost</host>
+    <port>5140</port>
+    <customFields>{"Hostname": "${HOSTNAME}", "JVM": "${JVM_NAME}", "Akka port": "${AKKA_PORT}"}</customFields>
+  </appender>
+-->
+
+<!--
+  <appender name="AZURE" class="com.microsoft.applicationinsights.logback.ApplicationInsightsAppender">
+      <instrumentationKey>${APPLICATION_INSIGHTS_KEY}</instrumentationKey>
+  </appender>
+-->
+
+  <root level="${LOG_LEVEL}">
     <appender-ref ref="FILE" />
     <appender-ref ref="CONSOLE" />
+<!--    <appender-ref ref="STASH" /> -->
+<!--    <appender-ref ref="AZURE"/> -->
   </root>
 
 </configuration>
