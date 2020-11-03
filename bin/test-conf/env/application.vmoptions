@@ -1,0 +1,9 @@
+-XX:+UseContainerSupport
+-XX:MaxRAMPercentage=75.0
+-XX:G1ReservePercent=20
+-XX:+UnlockDiagnosticVMOptions
+-XX:+HeapDumpOnOutOfMemoryError
+-XX:HeapDumpPath=
+-XX:NativeMemoryTracking=summary
+-XX:+PrintNMTStatistics
+-Xlog:gc
