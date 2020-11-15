@@ -2,7 +2,7 @@ version: '2.4'
 
 services:
   postgres:
-    image: postgres:10.2-alpine
+    image: topaztechnology/topaz-postgres:11.9
     hostname: postgres
     restart: always
     # Uncomment to expose Postgres externally
@@ -11,27 +11,14 @@ services:
     volumes:
     - postgres-data:/var/lib/postgresql/data
     environment:
-      POSTGRES_USER: topaz
-      POSTGRES_DB: topaz-main
-
-  redis:
-    image: topaztechnology/redis:4.0.2
-    hostname: redis
-    restart: always
-    # Uncomment to expose Redis externally
-    #ports:
-    #- 6379:6379
-    volumes:
-    - redis-data:/redis/data
-    environment:
-      LOG_LEVEL: INFO
-      REDIS_TYPE: server
+      POSTGRES_PASSWORD: postgres
+      TOPAZ_PASSWORD: topaz
 
   monet:
     image: topaztechnology/monetdb:11.31.13
     hostname: monet
     restart: always
-    # Uncomment to expose Redis externally
+    # Uncomment to expose Monet externally
     #ports:
     #- 50000:50000
     volumes:
@@ -46,9 +33,9 @@ services:
     hostname: topaz
     restart: always
     mem_limit: 6gb
-    ports:
-    - 9021:9021    # Getdown port
-    - 26634:26634  # Topaz server port
+    #ports:
+    # Uncomment to expose REST port externally
+    #- 26634:26634
     # Uncomment to expost REPL port locally
     #- 127.0.0.1:26636:26636
     volumes:
@@ -69,7 +56,6 @@ services:
       PASSWORD_HASHING_PEPPER: "pepper"
     depends_on:
     - postgres
-    - redis
     - monet
 
   topaz-compute-1:
@@ -102,12 +88,26 @@ services:
     depends_on:
     - topaz
   
+  nginx:
+    image: topaztechnology/topaz-nginx:1.18.0
+    hostname: nginx
+    restart: always
+    volumes:
+    - topaz-certs:/etc/nginx/certs
+    ports:
+    - 443:443
+    environment:
+      INTERNAL_SOCKET: topaz:26634
+    depends_on:
+    - topaz
+
 volumes:
   postgres-data:
-  redis-data:
   monet-data:
   topaz-data:
   topaz-log:
   topaz-shared:
   topaz-conf:
+    external: true
+  topaz-certs:
     external: true

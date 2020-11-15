@@ -16,7 +16,7 @@
       <pattern>%d{ISO8601} %-5level [%thread] - %msg%n</pattern>
     </encoder>
     <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-      <level>INFO</level>
+      <level>DEBUG</level>
     </filter>
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
       <fileNamePattern>/opt/topaz/log/topaz-${JVM_NAME}.%d{yyyy-MM-dd}.log</fileNamePattern>
@@ -34,7 +34,7 @@
           </pattern>
       </encoder>
       <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-          <level>INFO</level>
+          <level>DEBUG</level>
       </filter>
   </appender>
 
