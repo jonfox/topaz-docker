@@ -1,7 +1,7 @@
 -XX:+UseContainerSupport
 -XX:MaxRAMPercentage=75.0
 -XX:G1ReservePercent=20
+-XX:+AlwaysPreTouch
 -XX:+UnlockDiagnosticVMOptions
 -XX:+HeapDumpOnOutOfMemoryError
 -XX:HeapDumpPath=
--Xlog:gc

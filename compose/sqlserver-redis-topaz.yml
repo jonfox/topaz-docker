@@ -30,9 +30,10 @@ services:
       REDIS_TYPE: server
 
   monet:
-    image: topaztechnology/monetdb:11.31.13
+    image: topaztechnology/monetdb:11.37.11
     hostname: monet
     restart: always
+    mem_limit: 1gb
     # Uncomment to expose Monet externally
     #ports:
     #- 50000:50000
@@ -60,6 +61,7 @@ services:
     - topaz-shared:/opt/topaz/tmp
     environment:
       LOG_LEVEL: INFO
+      DISABLE_GC_LOGGING: 1
       TOPAZ_START_ARGS: com.topaz.server.Main
       AKKA_DISCOVERY_TYPE: config
       JVM_NAME: Seed
