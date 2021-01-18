@@ -2,7 +2,7 @@ version: '2.4'
 
 services:
   postgres:
-    image: postgres:10.2-alpine
+    image: topaztechnology/topaz-postgres:11.9_1
     hostname: postgres
     restart: always
     # Uncomment to expose Postgres externally
@@ -11,8 +11,9 @@ services:
     volumes:
     - postgres-data:/var/lib/postgresql/data
     environment:
-      POSTGRES_USER: topaz
-      POSTGRES_DB: topaz-main
+      POSTGRES_PASSWORD: postgres
+      TOPAZ_PASSWORD: topaz
+      TOPAZRO_PASSWORD: topazro
 
   redis:
     image: topaztechnology/redis:4.0.2
