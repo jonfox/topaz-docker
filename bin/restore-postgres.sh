@@ -4,6 +4,7 @@ set -eo pipefail
 
 if [ "$#" -lt 1 ]; then
   echo "syntax: $0 <full backup path> [docker project]"
+  exit 1
 fi
 
 BACKUP_PATH=$1
@@ -23,7 +24,7 @@ echo "Restoring Postgres backup"
 docker cp ${BACKUP_PATH}/topaz_main.dump ${DOCKER_PROJECT}_postgres_1:/tmp/
 docker cp ${BACKUP_PATH}/topaz_tick.dump ${DOCKER_PROJECT}_postgres_1:/tmp/
 docker exec ${DOCKER_PROJECT}_postgres_1 sh -c \
-  "pg_restore -v -U topaz -d topaz_main --no-owner --clean /tmp/topaz_main.dump && pg_restore -v -U topaz -d topaz_tick --no-owner --clean /tmp/topaz_tick.dump"
+  "pg_restore -v -U topaz -d topaz_main --no-owner --clean --no-acl /tmp/topaz_main.dump && pg_restore -v -U topaz -d topaz_tick --no-owner --clean --no-acl /tmp/topaz_tick.dump"
 
 echo "Removing stale Monet & flatbuffers data"
 docker stop ${DOCKER_PROJECT}_monet_1

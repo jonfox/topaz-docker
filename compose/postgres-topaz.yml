@@ -2,7 +2,7 @@ version: '2.4'
 
 services:
   postgres:
-    image: topaztechnology/topaz-postgres:11.9
+    image: topaztechnology/topaz-postgres:11.9_1
     hostname: postgres
     restart: always
     # Uncomment to expose Postgres externally
@@ -13,6 +13,7 @@ services:
     environment:
       POSTGRES_PASSWORD: postgres
       TOPAZ_PASSWORD: topaz
+      TOPAZRO_PASSWORD: topazro
 
   monet:
     image: topaztechnology/monetdb:11.37.11
